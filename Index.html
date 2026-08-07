@@ -1,1 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<title>Radar Russia</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="map"></div>
+
+<div id="topbar">
+
+<button id="locate" title="Мое местоположение">
+📍
+</button>
+
+<div id="title">
+Radar Russia
+</div>
+
+<button id="coverageBtn">
+Зоны покрытия
+</button>
+
+</div>
+
+<div id="timeline">
+
+<button id="play">
+▶
+</button>
+
+<input
+type="range"
+id="timeSlider"
+min="0"
+max="10"
+value="10">
+
+<span id="timeLabel">
+Сейчас
+</span>
+
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script src="script.js"></script>
+
+</body>
+</html>
