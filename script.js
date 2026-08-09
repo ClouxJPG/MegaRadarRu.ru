@@ -356,3 +356,48 @@ createRadarLegend();
 console.log(
     `Radar Russia: загружено ${radars.length} радиолокационных пунктов`
 );
+/* =========================================================
+   16. ДОБАВЛЕНИЕ КНОПКИ "КАРТА ОСАДКОВ"
+   ========================================================= */
+
+// Создаем кнопку для отображения карты осадков
+const rainButton = L.control({
+    position: 'topright'
+});
+
+rainButton.onAdd = function() {
+    const div = L.DomUtil.create('div', 'rain-button');
+    div.innerHTML = `
+        <button id="showRain" style="
+            background: rgba(20,20,20,0.9);
+            color: white;
+            border: 1px solid #555;
+            border-radius: 5px;
+            padding: 8px 15px;
+            cursor: pointer;
+            font-size: 13px;
+            font-family: Arial, sans-serif;
+            margin-top: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+        " 
+        onmouseover="this.style.background='rgba(40,40,40,0.9)'" 
+        onmouseout="this.style.background='rgba(20,20,20,0.9)'">
+            🌧️ Карта осадков
+        </button>
+    `;
+    return div;
+};
+
+rainButton.addTo(map);
+
+// Обработчик клика по кнопке
+document.addEventListener('click', function(e) {
+    if (e.target.id === 'showRain') {
+        // Открываем карту осадков в новом окне
+        window.open('https://meteoinfo.ru/nowcasting', '_blank');
+    }
+});
+
+// Дополнительно: показываем сообщение при клике
+console.log('Кнопка "Карта осадков" добавлена! Нажмите на неё, чтобы открыть карту Гидрометцентра.');
