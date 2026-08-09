@@ -297,12 +297,12 @@ document.head.appendChild(
    radarReflectivity.addTo(map);
 */
 /* =========================================================
-   14. ЗАГОТОВКА ДЛЯ ЛЕГЕНДЫ dBZ
+   14. ЗАГОТОВКА ДЛЯ ЛЕГЕНДЫ dBZ (ВЕРХНИЙ ПРАВЫЙ УГОЛ)
    ========================================================= */
 function createRadarLegend() {
     const legend =
         L.control({
-            position: "bottomright"
+            position: "topright"    // ИЗМЕНЕНО: было "bottomright"
         });
     legend.onAdd = function () {
         const div =
@@ -318,6 +318,7 @@ function createRadarLegend() {
                 border-radius:10px;
                 box-shadow:0 0 12px rgba(0,0,0,.3);
                 font-size:12px;
+                margin-top: 50px;     /* ОТСТУП СВЕРХУ, ЧТОБЫ НЕ ПЕРЕКРЫВАТЬ КНОПКИ */
             ">
                 <div style="
                     font-weight:700;
