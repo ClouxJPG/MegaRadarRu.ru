@@ -158,7 +158,7 @@ radars.forEach((radar) => {
     `);
     marker.addTo(radarLayer);
     
-    /* ---------- ЗОНЫ ПОКРЫТИЯ ---------- */
+    /* ---------- ЗОНЫ ПОКРЫТИЯ (СПЛОШНЫЕ КОНТУРЫ) ---------- */
     
     // 1. БЛИЖНЯЯ ЗОНА (0-50 км)
     const nearZone = L.circle(
@@ -178,7 +178,7 @@ radars.forEach((radar) => {
     );
     nearZone.addTo(coverageLayer);
     
-    // 2. СРЕДНЯЯ ЗОНА (50-150 км)
+    // 2. СРЕДНЯЯ ЗОНА (50-150 км) - СПЛОШНОЙ КОНТУР
     const midZone = L.circle(
         [radar.lat, radar.lon],
         {
@@ -187,8 +187,8 @@ radars.forEach((radar) => {
             weight: 2.5,
             opacity: 1,
             fillColor: "#ffaa00",
-            fillOpacity: 0.03,
-            dashArray: "8 6"
+            fillOpacity: 0.03
+            // УБРАН dashArray
         }
     );
     midZone.bindTooltip(
@@ -197,7 +197,7 @@ radars.forEach((radar) => {
     );
     midZone.addTo(coverageLayer);
     
-    // 3. ДАЛЬНЯЯ ЗОНА (150-250 км)
+    // 3. ДАЛЬНЯЯ ЗОНА (150-250 км) - СПЛОШНОЙ КОНТУР
     const farZone = L.circle(
         [radar.lat, radar.lon],
         {
@@ -206,8 +206,8 @@ radars.forEach((radar) => {
             weight: 2,
             opacity: 1,
             fillColor: "#ff4444",
-            fillOpacity: 0.02,
-            dashArray: "12 8"
+            fillOpacity: 0.02
+            // УБРАН dashArray
         }
     );
     farZone.bindTooltip(
