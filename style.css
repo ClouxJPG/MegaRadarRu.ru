@@ -160,3 +160,33 @@ bottom:12px;
 }
 
 }
+
+/* =========================================================
+   КНОПКА КАРТЫ ОСАДКОВ
+   ========================================================= */
+.rain-button {
+    margin-top: 10px;
+}
+
+.rain-button button {
+    background: rgba(20,20,20,0.9) !important;
+    color: white !important;
+    border: 1px solid #555 !important;
+    border-radius: 5px !important;
+    padding: 8px 15px !important;
+    cursor: pointer !important;
+    font-size: 13px !important;
+    font-family: Arial, sans-serif !important;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3) !important;
+    transition: all 0.3s !important;
+    white-space: nowrap !important;
+}
+
+.rain-button button:hover {
+    background: rgba(40,40,40,0.9) !important;
+    transform: scale(1.05) !important;
+}
+
+.rain-button button:active {
+    transform: scale(0.95) !important;
+}
