@@ -297,83 +297,55 @@ document.head.appendChild(
    radarReflectivity.addTo(map);
 */
 /* =========================================================
-   14. ЗАГОТОВКА ДЛЯ ЛЕГЕНДЫ dBZ (ВЕРХНИЙ ПРАВЫЙ УГОЛ)
+   14. ЛЕГЕНДА ОТРАЖАЕМОСТИ (ВЕРХНИЙ ПРАВЫЙ УГОЛ)
    ========================================================= */
-function createRadarLegend() {
-    const legend =
-        L.control({
-            position: "topright"    // ИЗМЕНЕНО: было "bottomright"
-        });
-    legend.onAdd = function () {
-        const div =
-            L.DomUtil.create(
-                "div",
-                "radar-legend"
-            );
-        div.innerHTML = `
-            <div style="
-                background:rgba(20,20,20,.92);
-                color:white;
-                padding:10px;
-                border-radius:10px;
-                box-shadow:0 0 12px rgba(0,0,0,.3);
-                font-size:12px;
-                margin-top: 50px;     /* ОТСТУП СВЕРХУ, ЧТОБЫ НЕ ПЕРЕКРЫВАТЬ КНОПКИ */
-            ">
-                <div style="
-                    font-weight:700;
-                    margin-bottom:7px;
-                ">
-                    Отражаемость
-                </div>
-                <div style="
-                    display:flex;
-                    height:12px;
-                    width:180px;
-                ">
-                    <span style="
-                        flex:1;
-                        background:#00bfff;
-                    "></span>
-                    <span style="
-                        flex:1;
-                        background:#00ff00;
-                    "></span>
-                    <span style="
-                        flex:1;
-                        background:#ffff00;
-                    "></span>
-                    <span style="
-                        flex:1;
-                        background:#ff9900;
-                    "></span>
-                    <span style="
-                        flex:1;
-                        background:#ff0000;
-                    "></span>
-                    <span style="
-                        flex:1;
-                        background:#ff00ff;
-                    "></span>
-                </div>
-                <div style="
-                    display:flex;
-                    justify-content:space-between;
-                    width:180px;
-                    margin-top:4px;
-                ">
-                    <span>10</span>
-                    <span>30</span>
-                    <span>40</span>
-                    <span>50</span>
-                    <span>60+</span>
-                </div>
+const legend = L.control({
+    position: "topright"
+});
+
+legend.onAdd = function() {
+    const div = L.DomUtil.create("div", "radar-legend");
+    div.innerHTML = `
+        <div style="
+            background:rgba(20,20,20,.92);
+            color:white;
+            padding:10px;
+            border-radius:10px;
+            box-shadow:0 0 12px rgba(0,0,0,.3);
+            font-size:12px;
+            margin-top: 50px;
+            margin-right: 10px;
+        ">
+            <div style="font-weight:700; margin-bottom:7px;">
+                Отражаемость (dBZ)
             </div>
-        `;
-        return div;
-    };
-    legend.addTo(map);
-}
+            <div style="display:flex; height:14px; width:180px; border-radius:3px; overflow:hidden;">
+                <span style="flex:1; background:#00bfff;"></span>
+                <span style="flex:1; background:#00ff00;"></span>
+                <span style="flex:1; background:#ffff00;"></span>
+                <span style="flex:1; background:#ff9900;"></span>
+                <span style="flex:1; background:#ff0000;"></span>
+                <span style="flex:1; background:#ff00ff;"></span>
+            </div>
+            <div style="display:flex; justify-content:space-between; width:180px; margin-top:4px; font-size:11px;">
+                <span>10</span>
+                <span>25</span>
+                <span>35</span>
+                <span>45</span>
+                <span>55</span>
+                <span>65+</span>
+            </div>
+        </div>
+    `;
+    return div;
+};
+
+legend.addTo(map);
+
+/* =========================================================
+   15. ГОТОВО
+   ========================================================= */
+console.log(`Radar Russia: загружено ${radars.length} радиолокационных пунктов`);
 /* =========================================================
    15. СОЗДАЁМ ЛЕГЕНДУ
    ========================================================= */
