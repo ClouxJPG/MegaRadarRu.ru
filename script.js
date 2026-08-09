@@ -112,7 +112,7 @@ function formatCoord(value, type) {
     return `${Math.abs(value).toFixed(4)}° ${direction}`;
 }
 /* =========================================================
-   8. ДОБАВЛЕНИЕ РАДАРОВ
+   8. ДОБАВЛЕНИЕ РАДАРОВ С РЕАЛЬНЫМ ПОКРЫТИЕМ
    ========================================================= */
 radars.forEach((radar) => {
     /* ---------- Маркер ---------- */
@@ -123,6 +123,7 @@ radars.forEach((radar) => {
             title: `ДМРЛ ${radar.name}`
         }
     );
+    
     /* ---------- Popup ---------- */
     marker.bindPopup(`
         <div style="
@@ -145,31 +146,116 @@ radars.forEach((radar) => {
                 ${formatCoord(radar.lon, "lon")}
             </div>
             <div>
-                <b>Зона обзора:</b>
-                ${radar.radius} км
+                <b>Макс. дальность:</b>
+                ${(radar.radius / 1000).toFixed(0)} км
+            </div>
+            <div style="margin-top:8px;font-size:12px;color:#888;">
+                ● Ближняя зона: 0-50 км<br>
+                ● Средняя зона: 50-150 км<br>
+                ● Дальняя зона: 150-${(radar.radius / 1000).toFixed(0)} км
             </div>
         </div>
     `);
     marker.addTo(radarLayer);
-    /* ---------- Зона покрытия ---------- */
-    const circle = L.circle(
+    
+    /* ---------- РЕАЛЬНОЕ ПОКРЫТИЕ (3 зоны) ---------- */
+    
+    // 1. БЛИЖНЯЯ ЗОНА (0-50 км) - максимальная точность
+    const nearZone = L.circle(
         [radar.lat, radar.lon],
         {
-            radius: radar.radius * 1000,
-            color: "#00aaff",
-            weight: 1,
-            opacity: 0.7,
-            fillColor: "#00aaff",
-            fillOpacity: 0.04
+            radius: 50000,
+            color: "#00ff88",
+            weight: 1.5,
+            opacity: 0.9,
+            fillColor: "#00ff88",
+            fillOpacity: 0.08,
+            className: "near-zone"
         }
     );
-    circle.bindTooltip(
-        `Зона ДМРЛ: ${radar.name}`,
+    nearZone.bindTooltip(
+        `Ближняя зона: ${radar.name}`,
+        { sticky: true, direction: 'center' }
+    );
+    nearZone.addTo(coverageLayer);
+    
+    // 2. СРЕДНЯЯ ЗОНА (50-150 км) - средняя точность
+    const midZone = L.circle(
+        [radar.lat, radar.lon],
         {
-            sticky: true
+            radius: 150000,
+            color: "#ffaa00",
+            weight: 1,
+            opacity: 0.6,
+            fillColor: "#ffaa00",
+            fillOpacity: 0.05,
+            className: "mid-zone",
+            stroke: true,
+            dashArray: "5 5" // пунктир для средней зоны
         }
     );
-    circle.addTo(coverageLayer);
+    midZone.bindTooltip(
+        `Средняя зона: ${radar.name}`,
+        { sticky: true, direction: 'center' }
+    );
+    midZone.addTo(coverageLayer);
+    
+    // 3. ДАЛЬНЯЯ ЗОНА (150-250 км) - минимальная точность
+    const farZone = L.circle(
+        [radar.lat, radar.lon],
+        {
+            radius: radar.radius,
+            color: "#ff4444",
+            weight: 0.8,
+            opacity: 0.4,
+            fillColor: "#ff4444",
+            fillOpacity: 0.02,
+            className: "far-zone",
+            stroke: true,
+            dashArray: "10 10" // длинный пунктир для дальней зоны
+        }
+    );
+    farZone.bindTooltip(
+        `Дальняя зона: ${radar.name}`,
+        { sticky: true, direction: 'center' }
+    );
+    farZone.addTo(coverageLayer);
+    
+    /* ---------- ДОПОЛНИТЕЛЬНО: Сектор обзора ---------- */
+    // Имитация поворота антенны (для визуализации)
+    const sectors = [
+        { start: 0, end: 120, color: "#00aaff" },
+        { start: 120, end: 240, color: "#00aaff" },
+        { start: 240, end: 360, color: "#00aaff" }
+    ];
+    
+    sectors.forEach((sector, index) => {
+        // Создаем сектор с помощью полигона
+        const points = [];
+        const steps = 20;
+        const radius_deg = (radar.radius / 111320); // перевод км в градусы
+        
+        points.push([radar.lat, radar.lon]);
+        
+        for (let i = 0; i <= steps; i++) {
+            const angle = (sector.start + (sector.end - sector.start) * (i / steps)) * Math.PI / 180;
+            const lat = radar.lat + radius_deg * Math.cos(angle);
+            const lon = radar.lon + radius_deg * Math.sin(angle) / Math.cos(radar.lat * Math.PI / 180);
+            points.push([lat, lon]);
+        }
+        
+        const sectorPolygon = L.polygon(points, {
+            color: sector.color,
+            weight: 0.5,
+            opacity: 0.2,
+            fillColor: sector.color,
+            fillOpacity: 0.03,
+            className: "sector-polygon"
+        });
+        
+        // Добавляем только если зоны покрытия видны
+        sectorPolygon.addTo(coverageLayer);
+    });
 });
 /* =========================================================
    9. КНОПКА "ЗОНЫ ПОКРЫТИЯ"
