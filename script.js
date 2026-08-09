@@ -156,16 +156,16 @@ radars.forEach((radar) => {
     `);
     marker.addTo(radarLayer);
     
-    /* ---------- ЗОНА ПОКРЫТИЯ (ТОНКИЙ ПОЛУПРОЗРАЧНЫЙ КОНТУР, СЕРАЯ ЗАЛИВКА) ---------- */
+    /* ---------- ЗОНА ПОКРЫТИЯ (СЕРЫЙ КОНТУР, СЕРАЯ ЗАЛИВКА) ---------- */
     
     const farZone = L.circle(
         [radar.lat, radar.lon],
         {
             radius: radar.radius,
-            color: "#000000",
-            weight: 1.2,            // ТОНЬШЕ (было 2)
-            opacity: 0.6,           // СЛЕГКА ПРОЗРАЧНЫЙ (было 1)
-            fillColor: "#808080",
+            color: "#666666",        // ТЁМНО-СЕРЫЙ КОНТУР
+            weight: 1.2,
+            opacity: 0.6,
+            fillColor: "#999999",    // СВЕТЛО-СЕРЫЙ (НА ТОН СВЕТЛЕЕ КОНТУРА)
             fillOpacity: 0.15
         }
     );
