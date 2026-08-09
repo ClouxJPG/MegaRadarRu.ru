@@ -150,68 +150,27 @@ radars.forEach((radar) => {
                 ${(radar.radius / 1000).toFixed(0)} км
             </div>
             <div style="margin-top:8px;font-size:12px;color:#888;">
-                ● Ближняя зона: 0-50 км<br>
-                ● Средняя зона: 50-150 км<br>
-                ● Дальняя зона: 150-${(radar.radius / 1000).toFixed(0)} км
+                ● Зона покрытия: до ${(radar.radius / 1000).toFixed(0)} км
             </div>
         </div>
     `);
     marker.addTo(radarLayer);
     
-    /* ---------- ЗОНЫ ПОКРЫТИЯ (СПЛОШНЫЕ КОНТУРЫ) ---------- */
+    /* ---------- ЗОНА ПОКРЫТИЯ (ЧЁРНЫЙ КОНТУР, СЕРАЯ ЗАЛИВКА) ---------- */
     
-    // 1. БЛИЖНЯЯ ЗОНА (0-50 км)
-    const nearZone = L.circle(
-        [radar.lat, radar.lon],
-        {
-            radius: 50000,
-            color: "#00ff88",
-            weight: 3,
-            opacity: 1,
-            fillColor: "#00ff88",
-            fillOpacity: 0.05
-        }
-    );
-    nearZone.bindTooltip(
-        `Ближняя зона: ${radar.name}`,
-        { sticky: true, direction: 'center' }
-    );
-    nearZone.addTo(coverageLayer);
-    
-    // 2. СРЕДНЯЯ ЗОНА (50-150 км) - СПЛОШНОЙ КОНТУР
-    const midZone = L.circle(
-        [radar.lat, radar.lon],
-        {
-            radius: 150000,
-            color: "#ffaa00",
-            weight: 2.5,
-            opacity: 1,
-            fillColor: "#ffaa00",
-            fillOpacity: 0.03
-            // УБРАН dashArray
-        }
-    );
-    midZone.bindTooltip(
-        `Средняя зона: ${radar.name}`,
-        { sticky: true, direction: 'center' }
-    );
-    midZone.addTo(coverageLayer);
-    
-    // 3. ДАЛЬНЯЯ ЗОНА (150-250 км) - СПЛОШНОЙ КОНТУР
     const farZone = L.circle(
         [radar.lat, radar.lon],
         {
             radius: radar.radius,
-            color: "#ff4444",
+            color: "#000000",
             weight: 2,
             opacity: 1,
-            fillColor: "#ff4444",
-            fillOpacity: 0.02
-            // УБРАН dashArray
+            fillColor: "#808080",    // СЕРЫЙ ЦВЕТ
+            fillOpacity: 0.15        // ПОЛУПРОЗРАЧНЫЙ
         }
     );
     farZone.bindTooltip(
-        `Дальняя зона: ${radar.name}`,
+        `Зона покрытия: ${radar.name}`,
         { sticky: true, direction: 'center' }
     );
     farZone.addTo(coverageLayer);
